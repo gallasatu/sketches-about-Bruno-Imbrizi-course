@@ -32,7 +32,6 @@ const sketch = () => {
       context.save();
       context.beginPath();
       context.translate(x, y);
-      context.lineWidth = 5;
       context.arc( 0, 0, 10, 0, Math.PI * 2);
       context.fill();
       context.restore();
