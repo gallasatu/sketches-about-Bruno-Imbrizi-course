@@ -1,0 +1,91 @@
+const canvasSketch = require('canvas-sketch');
+const random = require('canvas-sketch-util/random');
+
+
+const settings = {
+  dimensions: [ 1080, 1080 ],
+  animate: true,
+};
+
+const sketch = ({ context, width, height }) => {
+
+  points = [];
+
+  for (let i = 0; i < 60; i++) {
+    const w = random.range(0.3 * width, 0.7 * width);
+    const h = random.range(0, height);
+
+    points.push(new Point(w, h));
+  }
+
+  return ({ context, width, height }) => {
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, width, height);
+
+    for (let i = 0; i < points.length; i++) {
+      const point = points[i];
+
+      for (let j = i + 1; j < points.length; j++) {
+        const other = points[j];
+
+        if (point.pos.getDistance(other.pos) > 200) continue
+    
+        context.beginPath();
+        context.moveTo(point.pos.x, point.pos.y);
+        context.lineTo(other.pos.x, other.pos.y);
+        context.stroke();
+      }
+    }
+    
+
+    points.forEach(point => { 
+      point.move();
+      point.draw(context);
+      point.bounce(width, height);
+    });
+    
+  };
+};
+
+canvasSketch(sketch, settings);
+
+class Vector {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+
+getDistance(v) {
+  const dx = this.x - v.x;
+  const dy = this.y - v.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+}
+
+class Point {
+  constructor(x, y) {
+    this.pos = new Vector(x, y);
+    this.vel = new Vector(random.range( -2, 2), random.range( -0.2, 0.2));
+}
+
+  move() {
+    this.pos.x += this.vel.x;
+    this.pos.y += this.vel.y;
+  }
+
+  bounce(width, height) {
+    if (this.pos.x <= 0.3 * width || this.pos.x >= 0.7 * width) this.vel.x *= -1
+    if (this.pos.y <=0 || this.pos.y >= height) this.vel.y *= -1
+  } 
+
+  draw(context) {
+    context.save();
+    context.translate(this.pos.x, this.pos.y);
+    context.fillStyle = 'black';
+    context.beginPath();
+    context.arc(0, 0, 10, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+  }
+}
