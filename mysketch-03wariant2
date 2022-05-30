@@ -41,7 +41,7 @@ const sketch = ({ context, width, height }) => {
     points.forEach(point => { 
       point.move();
       point.draw(context);
-      point.bounce(width, height);
+      point.wrap(width, height);
     });
     
   };
@@ -74,10 +74,12 @@ class Point {
     this.pos.y += this.vel.y;
   }
 
-  bounce(width, height) {
+  wrap(width, height) {
     if (this.pos.x <= 0.3 * width || this.pos.x >= 0.7 * width) this.vel.x *= -1
     if (this.pos.y < 0) this.pos.y = height;
   } 
+
+  
 
   draw(context) {
     context.save();
