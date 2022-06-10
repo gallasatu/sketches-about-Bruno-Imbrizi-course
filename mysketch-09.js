@@ -22,7 +22,7 @@ const sketch = ({ context, width, height }) => {
   
 
   
-    const cell = 10;
+    const cell = 20;
     const cols = Math.floor(width / cell);
     const rows = Math.floor(height / cell);
 
@@ -97,7 +97,7 @@ const sketch = ({ context, width, height }) => {
         context.fillStyle = 'white';
         
         const glyph = getGlyph(r);
-        context.font = `${15}px ${fontFamily}`;
+        context.font = `${30}px ${fontFamily}`;
        
 
      
@@ -117,12 +117,12 @@ const sketch = ({ context, width, height }) => {
   };
 };
 const getGlyph = (v) => {
-  if (v < 50) return '';
+  if (v < 50) return 'I';
   if (v < 100) return '.';
   if (v < 150) return '/';
   if (v < 200) return '-';
 
-  return 'O';
+  return '=';
 
   // const glyphs = 'I-~_ox'.split('');
   // return random.pick(glyphs);
